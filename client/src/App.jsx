@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { Building2, UserCircle } from "lucide-react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
+
 import LoginForm from "./assets/components/LoginForm";
+import SignupForm from "./assets/components/SignupForm";
 import ComplaintForm from "./assets/components/ComplaintForm";
 import AdminDashboard from "./assets/components/AdminDashboard";
+import Header from "./assets/components/Header";
+import Footer from "./assets/components/Footer";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,9 +22,7 @@ const App = () => {
     try {
       const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
@@ -31,52 +39,51 @@ const App = () => {
     }
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-indigo-600 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Building2 className="h-8 w-8 text-white" />
-              <h1 className="text-2xl font-bold text-white">IIITA Help Desk</h1>
-            </div>
-            {isLoggedIn && (
-              <div className="flex items-center space-x-2 text-white">
-                <UserCircle className="h-6 w-6" />
-                <span>{isAdmin ? "Admin" : "Student"}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+    <Router>
+      <div className="flex flex-col min-h-screen bg-gray-50">
+        <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
 
-      {/* Main Content */}
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {!isLoggedIn ? (
-          <div className="max-w-md mx-auto">
-            <LoginForm onLogin={handleLogin} />
-          </div>
-        ) : isAdmin ? (
-          <AdminDashboard />
-        ) : (
-          <ComplaintForm />
-        )}
-      </main>
+        <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                isLoggedIn ? (
+                  <Navigate to={isAdmin ? "/admin" : "/complaint"} />
+                ) : (
+                  <LoginForm onLogin={handleLogin} />
+                )
+              }
+            />
+            <Route
+              path="/signup"
+              element={<SignupForm onSignupSuccess={() => window.location.href = "/"} />}
+            />
+            <Route
+              path="/complaint"
+              element={
+                isLoggedIn && !isAdmin ? <ComplaintForm /> : <Navigate to="/" />
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                isLoggedIn && isAdmin ? <AdminDashboard /> : <Navigate to="/" />
+              }
+            />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-            <p className="text-sm">&copy; 2025 IIITA Help Desk. All rights reserved.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-indigo-400 transition duration-300">Privacy Policy</a>
-              <a href="#" className="hover:text-indigo-400 transition duration-300">Terms of Service</a>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
+        <Footer />
+      </div>
+    </Router>
   );
 };
 

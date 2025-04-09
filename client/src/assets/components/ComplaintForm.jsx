@@ -50,143 +50,82 @@ const ComplaintForm = () => {
   };
 
   return (
-    <div className="complaint-form-container">
-      <style>{`
-        .complaint-form-container {
-          background-color: #ffffff;
-          border: 1px solid #e5e7eb;
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-          border-radius: 1rem;
-          padding: 2rem;
-          max-width: 40rem;
-          margin: 2rem auto;
-          font-family: 'Segoe UI', sans-serif;
-        }
+    <div className="min-h-screen flex justify-center items-center bg-gray-50 px-4">
+      <div className="w-full max-w-2xl p-8 bg-white rounded-2xl shadow-lg">
+        <h2 className="text-2xl font-bold mb-6 text-indigo-700 text-center">Submit a Complaint</h2>
 
-        .complaint-form-title {
-          font-size: 1.75rem;
-          font-weight: 700;
-          color: #4f46e5;
-          margin-bottom: 1.25rem;
-          text-align: center;
-        }
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Roll Number</label>
+            <input
+              type="text"
+              name="rollNumber"
+              value={formData.rollNumber}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
 
-        .complaint-form-group {
-          margin-bottom: 1rem;
-        }
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Complaint Type</label>
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="Cleaning">Cleaning</option>
+              <option value="Electrical">Electrical</option>
+              <option value="Plumbing">Plumbing</option>
+              <option value="Carpentry">Carpentry</option>
+            </select>
+          </div>
 
-        .complaint-form-label {
-          display: block;
-          font-weight: 600;
-          font-size: 0.9rem;
-          margin-bottom: 0.25rem;
-          color: #374151;
-        }
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea
+              name="description"
+              rows="3"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
 
-        .complaint-form-input,
-        .complaint-form-select,
-        .complaint-form-textarea {
-          width: 100%;
-          padding: 0.75rem 1rem;
-          border: 1px solid #d1d5db;
-          border-radius: 0.5rem;
-          font-size: 0.95rem;
-        }
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
+            <input
+              type="text"
+              name="building"
+              value={formData.building}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
 
-        .complaint-form-input:focus,
-        .complaint-form-select:focus,
-        .complaint-form-textarea:focus {
-          border-color: #6366f1;
-          outline: none;
-        }
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Room</label>
+            <input
+              type="text"
+              name="room"
+              value={formData.room}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
 
-        .complaint-form-submit {
-          width: 100%;
-          background-color: #4f46e5;
-          color: white;
-          font-weight: 600;
-          padding: 0.75rem 1rem;
-          border: none;
-          border-radius: 0.5rem;
-          font-size: 1rem;
-          cursor: pointer;
-        }
-
-        .complaint-form-submit:hover {
-          background-color: #4338ca;
-        }
-      `}</style>
-
-      <h2 className="complaint-form-title">Submit a Complaint</h2>
-
-      <form onSubmit={handleSubmit}>
-        <div className="complaint-form-group">
-          <label className="complaint-form-label">Roll Number</label>
-          <input
-            type="text"
-            name="rollNumber"
-            value={formData.rollNumber}
-            onChange={handleChange}
-            className="complaint-form-input"
-            required
-          />
-        </div>
-
-        <div className="complaint-form-group">
-          <label className="complaint-form-label">Complaint Type</label>
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="complaint-form-select"
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200 font-medium"
           >
-            <option value="Cleaning">Cleaning</option>
-            <option value="Electrical">Electrical</option>
-            <option value="Plumbing">Plumbing</option>
-            <option value="Carpentry">Carpentry</option>
-          </select>
-        </div>
-
-        <div className="complaint-form-group">
-          <label className="complaint-form-label">Description</label>
-          <textarea
-            name="description"
-            rows="3"
-            value={formData.description}
-            onChange={handleChange}
-            className="complaint-form-textarea"
-            required
-          />
-        </div>
-
-        <div className="complaint-form-group">
-          <label className="complaint-form-label">Building</label>
-          <input
-            type="text"
-            name="building"
-            value={formData.building}
-            onChange={handleChange}
-            className="complaint-form-input"
-            required
-          />
-        </div>
-
-        <div className="complaint-form-group">
-          <label className="complaint-form-label">Room</label>
-          <input
-            type="text"
-            name="room"
-            value={formData.room}
-            onChange={handleChange}
-            className="complaint-form-input"
-            required
-          />
-        </div>
-
-        <button type="submit" className="complaint-form-submit">
-          Submit Complaint
-        </button>
-      </form>
+            Submit Complaint
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
